@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CALCULAR IMC</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <h1 class="text-center">Calculadora IMC</h1>
+  </header>
+  <main class="container mt-5">
+    <div class="calc">
+      <label for="altura">Sua altura (em centímetros):</label>
+      <input type="number" name="altura" id="altura" class="form-control" placeholder="Ex: 182" required>
+      <br>
+      <label for="peso">Seu peso (em kg):</label>
+      <input type="number" name="peso" id="peso" class="form-control" placeholder="Ex: 100 Kg" required>
+      <br>
+      <button onclick="calcular()" class="btn">Calcular</button>
+      <br>
+      <div id="resultado-container">
+        <h3>Resultado:</h3>
+        <span id="resultado"></span>
+        <div id="resultado-imagem"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const imagensResultados = {
+      "Abaixo do Peso": "img/1.png",
+      "Peso Normal": "img/2.png",
+      "Sobrepeso": "img/3.png",
+      "Obesidade Grau I": "img/4.png",
+      "Obesidade Grau II": "img/5.png",
+      "Obesidade Grau III": "img/6.png"
+    };
+
+    function calcular() {
+      let peso = parseFloat(document.getElementById("peso").value.replace(",", "."));
+      let alturaCm = parseFloat(document.getElementById("altura").value.replace(",", "."));
+
+      let alturaM = alturaCm / 100;
+
+      let imc = peso / (alturaM * alturaM);
+      if (!isNaN(imc)) {
+        let grauResultado;
+        if (imc <= 18.5) {
+          grauResultado = "Abaixo do Peso";
+        } else if (imc <= 24.9) {
+          grauResultado = "Peso Normal";
+        } else if (imc <= 29.9) {
+          grauResultado = "Sobrepeso";
+        } else if (imc <= 34.9) {
+          grauResultado = "Obesidade Grau I";
+        } else if (imc <= 39.9) {
+          grauResultado = "Obesidade Grau II";
+        } else {
+          grauResultado = "Obesidade Grau III";
+        }
+
+        resultado.innerHTML = `Seu resultado é ${imc.toFixed(2)} => ${grauResultado}`;
+
+
+        const resultadoImagem = document.createElement("img");
+        resultadoImagem.src = imagensResultados[grauResultado];
+        resultadoImagem.alt = grauResultado;
+        resultadoImagem.classList.add("resultado-imagem");
+
+
+
+        const resultadoContainer = document.getElementById("resultado-imagem");
+        resultadoContainer.innerHTML = "";
+        resultadoContainer.appendChild(resultadoImagem);
+      } else {
+        resultado.innerHTML = "Por favor, insira valores válidos.";
+        const resultadoContainer = document.getElementById("resultado-imagem");
+        resultadoContainer.innerHTML = "";
+      }
+    }
+  </script>
+</body>
+
+</html>
